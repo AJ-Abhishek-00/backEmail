@@ -1,0 +1,351 @@
+{
+  "info": {
+    "name": "Email Onebox API",
+    "description": "Complete API collection for Email Onebox backend testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "your-user-id-here",
+      "type": "string"
+    },
+    {
+      "key": "accountId",
+      "value": "your-account-id-here",
+      "type": "string"
+    },
+    {
+      "key": "emailId",
+      "value": "your-email-id-here",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Elasticsearch Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/elasticsearch/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["elasticsearch", "health"]
+            }
+          }
+        },
+        {
+          "name": "Sync All Accounts",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sync-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["sync-all"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Email Accounts",
+      "item": [
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"email\": \"test@example.com\",\n  \"imapHost\": \"imap.gmail.com\",\n  \"imapPort\": 993,\n  \"imapUsername\": \"test@example.com\",\n  \"imapPassword\": \"your-app-password\",\n  \"syncEnabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
+            }
+          }
+        },
+        {
+          "name": "Get Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Start Account Sync",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{accountId}}/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{accountId}}", "sync"]
+            }
+          }
+        },
+        {
+          "name": "Stop Account Sync",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{accountId}}/stop",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{accountId}}", "stop"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Emails",
+      "item": [
+        {
+          "name": "Get Emails",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emails?userId={{userId}}&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["emails"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "category",
+                  "value": "Interested",
+                  "disabled": true
+                },
+                {
+                  "key": "folder",
+                  "value": "INBOX",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Single Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emails/{{emailId}}?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["emails", "{{emailId}}"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Emails",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"meeting\",\n  \"category\": \"Interested\",\n  \"from\": 0,\n  \"size\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emails/search",
+              "host": ["{{baseUrl}}"],
+              "path": ["emails", "search"]
+            }
+          }
+        },
+        {
+          "name": "Categorize Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emails/{{emailId}}/categorize?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["emails", "{{emailId}}", "categorize"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Context",
+      "item": [
+        {
+          "name": "Save Product Context",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"productName\": \"Acme CRM\",\n  \"description\": \"A comprehensive CRM solution for small businesses with automation and integration capabilities\",\n  \"outreachAgenda\": \"I am applying for a job position. If the lead is interested, share the meeting booking link.\",\n  \"meetingLink\": \"https://cal.com/example\",\n  \"additionalContext\": \"We specialize in automation and integration with popular tools like Slack, Gmail, and more.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/product-context",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-context"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Context",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/product-context?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-context"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Features",
+      "item": [
+        {
+          "name": "Get Suggested Reply",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emails/{{emailId}}/suggested-reply",
+              "host": ["{{baseUrl}}"],
+              "path": ["emails", "{{emailId}}", "suggested-reply"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhook Logs",
+      "item": [
+        {
+          "name": "Get Webhook Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhook-logs?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook-logs"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                },
+                {
+                  "key": "emailId",
+                  "value": "{{emailId}}",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
